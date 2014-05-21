@@ -8,15 +8,20 @@ You can see this project in action at *published story link goes here*.
 
 ## Data
 
-*Describe the data sources here.  Use links and URLs to show where the data came from.  Put small sized originals or modified data sources in the ```data``` folder*
-
-*For larger data sources that may need to be processed, provide instructions on how to download.  For instance:  ```cd data && wget blah.txt```.  Also, make sure to put an entry in the ```.gitignore```.*
+* Green Line data from [MetroTransit](http://www.metrotransit.org/).
+    * Green line is route 902 (temporarily) and will be replacing route 50.
+    * [MetroTransit route data via DataFinder](http://www.datafinder.org/metadata/TransitRoutes.html)
+        * `mkdir -p data && cd data && wget ftp://gisftp.metc.state.mn.us/TransitRoutes.zip && unzip TransitRoutes.zip -d metrotransit-routes-shps; cd -;`
+    * Stop data from ??
+* Census data from [CensusReporter](http://censusreporter.org/).
+    * [Ian Dees](https://twitter.com/iandees) was very kind to query the Census Reporter database to figure out which Census Tracts were next to or very close to the Green Line route.
+    * http://api.censusreporter.org/1.0/data/show/latest?table_ids=B01001&geo_ids=14000US27053003800
 
 ## Data processing
 
-The following describes how the data was processed and is not necessarily needed to run or install the application, but more included for reference, transparency, and development.
-
-*Describe data processing here, include commands, or document any manual steps taken.  Put data processing scripts or configurations in the ```data-processing``` folder.*
+* Use GDAL to convert routes to GeoJSON for easier processing: `ogr2ogr -f "GeoJSON" data/metrotransit-routes.geo.json data/metrotransit-routes-shps/TransitRoutes.shp -t_srs EPSG:4326;`
+* Run the following: `node data-processing/get-green-line.js`
+    * This will pull out the Green Line route from the route data
 
 ## Development and running locally
 

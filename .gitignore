@@ -7,6 +7,11 @@ bower_components/
 dist/data.js
 dist/templates.js
 
+# "Big data"
+data/*shp*
+data/*.zip
+data/metrotransit-routes.geo.json
+
 
 # General git ignores
 .sass-cache
