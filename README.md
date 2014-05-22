@@ -17,11 +17,11 @@ You can see this project in action at *published story link goes here*.
     * This was also augmented by [Jane Tigan](https://twitter.com/janeellentigan/status/469480740522979328) to include a couple tracks that are included in the [Funders Collaborative Tracker](http://www.funderscollaborative.org/tracker).
     * Manually stored in `data/census-tracts-ids.json`.
     * http://api.censusreporter.org/1.0/data/show/latest?table_ids=B01001&geo_ids=14000US27053003800
-* Landmark data (such as major roads) from ??
+* Landmark data traced from [GeoJSON.io](http://geojson.io/#id=gist:zzolo/9e60510cae6db58eabd7).
 
 Get data sources:
 
-    mkdir -p data && cd data && wget ftp://gisftp.metc.state.mn.us/TransitRoutes.zip && unzip TransitRoutes.zip -d metrotransit-routes-shps && wget ftp://gisftp.metc.state.mn.us/PlannedTransitwayStations.zip && unzip PlannedTransitwayStations.zip -d metrotransit-planned-stations-shps; cd -;`
+    mkdir -p data && cd data && wget ftp://gisftp.metc.state.mn.us/TransitRoutes.zip && unzip TransitRoutes.zip -d metrotransit-routes-shps && wget ftp://gisftp.metc.state.mn.us/PlannedTransitwayStations.zip && unzip PlannedTransitwayStations.zip -d metrotransit-planned-stations-shps && wget https://gist.githubusercontent.com/zzolo/9e60510cae6db58eabd7/raw/map.geojson -O landmarks.geo.json; cd -;`
 
 ## Data processing
 
