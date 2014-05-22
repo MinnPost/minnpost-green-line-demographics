@@ -11,6 +11,7 @@ dist/templates.js
 data/*shp*
 data/*.zip
 data/metrotransit-routes.geo.json
+data/metrotransit-planned-stops.geo.json
 
 
 # General git ignores

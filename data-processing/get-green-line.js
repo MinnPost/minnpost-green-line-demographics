@@ -1,29 +1,50 @@
 /**
- * Simple script to get the green line.
+ * Simple script to get the green line and stops from the larger dataset.
  */
 var fs = require('fs');
 var path = require('path');
-var routes = require('../data/metrotransit-routes.geo.json');
-var greenLine = '902';
-var outputFile = path.join(__dirname, '../data/metrotransit-green-line.geo.json');
-var output;
 
-// Go through and find the Green line
+var routes = require('../data/metrotransit-routes.geo.json');
+var stops = require('../data/metrotransit-planned-stops.geo.json');
+
+var greenLineRoute = '902';
+var greenLineStops = ['Blue / Green', 'Green Line'];
+var routeOutput = path.join(__dirname, '../data/metrotransit-green-line.geo.json');
+var stopsOutput = path.join(__dirname, '../data/metrotransit-green-line-stops.geo.json');
+
+
+// Go through and find the Green line route
 routes.features.forEach(function(f, fi) {
-  if (f.properties.route === greenLine) {
-    output = f;
+  if (f.properties.route === greenLineRoute) {
+
+    // Add crs for reference
+    f.crs = routes.crs
+
+    // Save as file
+    fs.writeFile(routeOutput, JSON.stringify(f, null, 2), function(error) {
+      if (error) {
+        console.error(error);
+      }
+      else {
+        console.log('Green Line route GeoJSON found and saved.');
+      }
+    });
   }
 });
 
-// Add crs for reference
-output.crs = routes.crs
+
+
+// Go through and find the Green line routes
+stops.features = stops.features.filter(function(s, si) {
+  return (greenLineStops.indexOf(s.properties.Transitway) !== -1);
+});
 
 // Save as file
-fs.writeFile(outputFile, JSON.stringify(output, null, 2), function(error) {
+fs.writeFile(stopsOutput, JSON.stringify(stops, null, 2), function(error) {
   if (error) {
     console.error(error);
   }
   else {
-    console.log('Green Line GeoJSON saved found and save.');
+    console.log('Green Line stops GeoJSON filtered and saved ' + stops.features.length + ' stops.');
   }
 });

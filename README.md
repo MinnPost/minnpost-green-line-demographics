@@ -11,17 +11,23 @@ You can see this project in action at *published story link goes here*.
 * Green Line data from [MetroTransit](http://www.metrotransit.org/).
     * Green line is route 902 (temporarily) and will be replacing route 50.
     * [MetroTransit route data via DataFinder](http://www.datafinder.org/metadata/TransitRoutes.html)
-        * `mkdir -p data && cd data && wget ftp://gisftp.metc.state.mn.us/TransitRoutes.zip && unzip TransitRoutes.zip -d metrotransit-routes-shps; cd -;`
-    * Stop data from ??
-* Census data from [CensusReporter](http://censusreporter.org/).
-    * [Ian Dees](https://twitter.com/iandees) was very kind to query the Census Reporter database to figure out which Census Tracts were next to or very close to the Green Line route.
+    * Stop data from the [Planned Transitway Stations dataset on DataFinder](http://www.datafinder.org/metadata/PlannedTransitwayStations.html)
+* Census data by tract from [CensusReporter](http://censusreporter.org/).
+    * [Ian Dees](https://twitter.com/iandees) was very kind to query the Census Reporter database to figure out which Census Tracts were next to or very close to the Green Line route.  Posted [here](https://gist.github.com/iandees/9cab0abe95a38f3f7954).
+    * This was also augmented by [Jane Tigan](https://twitter.com/janeellentigan/status/469480740522979328) to include a couple tracks that are included in the [Funders Collaborative Tracker](http://www.funderscollaborative.org/tracker).
+    * Manually stored in `data/census-tracts-ids.json`.
     * http://api.censusreporter.org/1.0/data/show/latest?table_ids=B01001&geo_ids=14000US27053003800
+* Landmark data (such as major roads) from ??
+
+Get data sources:
+
+    mkdir -p data && cd data && wget ftp://gisftp.metc.state.mn.us/TransitRoutes.zip && unzip TransitRoutes.zip -d metrotransit-routes-shps && wget ftp://gisftp.metc.state.mn.us/PlannedTransitwayStations.zip && unzip PlannedTransitwayStations.zip -d metrotransit-planned-stations-shps; cd -;`
 
 ## Data processing
 
-* Use GDAL to convert routes to GeoJSON for easier processing: `ogr2ogr -f "GeoJSON" data/metrotransit-routes.geo.json data/metrotransit-routes-shps/TransitRoutes.shp -t_srs EPSG:4326;`
+* Use GDAL to convert routes and stops to GeoJSON for easier processing: `ogr2ogr -f "GeoJSON" data/metrotransit-routes.geo.json data/metrotransit-routes-shps/TransitRoutes.shp -t_srs EPSG:4326 && ogr2ogr -f "GeoJSON" data/metrotransit-planned-stops.geo.json data/metrotransit-planned-stations-shps/PlannedTransitwayStations.shp -t_srs EPSG:4326;`
 * Run the following: `node data-processing/get-green-line.js`
-    * This will pull out the Green Line route from the route data
+    * This will pull out the Green Line route from the route data and pull out the stops from the stops data.
 
 ## Development and running locally
 
