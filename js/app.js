@@ -7,18 +7,13 @@
 
 // Create main application
 define('minnpost-green-line-demographics', [
-  'jquery', 'underscore', 'ractive', 'ractive-events-tap', 'mpConfig', 'mpFormatters', 
+  'jquery', 'underscore', 'd3', 'topojson', 'mpConfig', 'mpFormatters',
   'helpers',
-  
-  
-  'text!templates/application.mustache',
-  'text!templates/loading.mustache'
+  'text!templates/application.mustache'
 ], function(
-  $, _, Ractive, RactiveEventsTap, mpConfig, mpFormatters, 
+  $, _, d3, topojson, mpConfig, mpFormatters,
   helpers,
-  
-  
-  tApplication, tLoading
+  tApplication
   ) {
 
   // Constructor for app
@@ -36,48 +31,84 @@ define('minnpost-green-line-demographics', [
     // Start function
     start: function() {
       var thisApp = this;
+      this.templateApplication = _.template(tApplication);
+      this.$el.html(this.templateApplication({}));
 
-      
-      // Create main application view
-      this.mainView = new Ractive({
-        el: this.$el,
-        template: tApplication,
-        data: {
-
-        },
-        partials: {
-          loading: tLoading
-        }
-      });
-      
-
-      
-      // Run examples.  Please remove for real application.
-      //
-      // Because of how Ractive initializes and how Highcharts work
-      // there is an inconsitency of when the container for the chart
-      // is ready and when highcharts loads the chart.  So, we put a bit of
-      // of a pause.
-      //
-      // In production, intializing a chart should be tied to data which
-      // can be used with a Ractive observer.
-      //
-      // This should not happen with underscore templates.
-      _.delay(function() { thisApp.makeExamples(); }, 400);
-      
+      // The DOM creation with underscore templating is
+      // not synchronous, so we hack around it
+      _.delay(function() {
+        // Get data then build app
+        thisApp.getData().done(function() {
+          thisApp.buildMap();
+        });
+      }, 200);
     },
 
-    
-    // Make some example depending on what parts were asked for in the
-    // templating process.  Remove, rename, or alter this.
-    makeExamples: function() {
-      
+    // Build base D3 Map
+    buildMap: function() {
+      var $container = this.$el.find('#green-line-map');
+      var width = $container.width();
+      var height = $container.height();
 
-      
+      // Make canvas
+      var svg = d3.select($container[0]).append('svg')
+        .attr('width', width)
+        .attr('height', height);
 
-      
+      // Make projection and path handler
+      var projectionData = this.data.greenLine;
+      var centroid = d3.geo.centroid(projectionData);
+      var projection = d3.geo.albersUsa()
+        .scale(150)
+        .translate([width / 2, height / 2]);
+      var projectionPath = d3.geo.path().projection(projection);
+
+      // Make group for features
+      var featureGroup = svg.append('g').attr('class', 'feature-group');
+
+      // Fit map to data
+      var b = projectionPath.bounds(projectionData);
+      featureGroup.attr('transform',
+        'translate(' + projection.translate() + ') ' +
+        'scale(' + 0.95 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height) + ') ' +
+        'translate(' + -(b[1][0] + b[0][0]) / 2 + ',' + -(b[1][1] + b[0][1]) / 2 + ')');
+
+      // Add green line route
+      featureGroup.selectAll('.greenline-route')
+        .data(this.data.greenLine.features)
+        .enter()
+          .append('path')
+          .attr('class', 'greenline-route')
+          .attr('d', projectionPath);
+
+      // Add landmarks
+      featureGroup.selectAll('.landmark-feature')
+        .data(topojson.feature(this.data.landmarks, this.data.landmarks.objects['landmarks.geo']).features)
+        .enter()
+          .append('path')
+          .attr('class', function(d) {
+            return 'landmark-feature ' + d.properties.type;
+          })
+          .attr('d', projectionPath);
+
     },
-    
+
+    // Get data sources
+    getData: function() {
+      var thisApp = this;
+
+      return helpers.getLocalData([
+        'metrotransit-green-line.geo.json',
+        'metrotransit-green-line-stops.geo.json',
+        'landmarks.topo.json'
+      ], this.options)
+        .done(function(a, b, c) {
+          thisApp.data = thisApp.data || {};
+          thisApp.data.greenLine = a[0];
+          thisApp.data.stops = b[0];
+          thisApp.data.landmarks = c[0];
+        });
+    },
 
     // Default options
     defaultOptions: {
@@ -86,7 +117,7 @@ define('minnpost-green-line-demographics', [
       el: '.minnpost-green-line-demographics-container',
       availablePaths: {
         local: {
-          
+
           css: ['.tmp/css/main.css'],
           images: 'images/',
           data: 'data/'

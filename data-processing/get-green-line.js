@@ -13,22 +13,19 @@ var routeOutput = path.join(__dirname, '../data/metrotransit-green-line.geo.json
 var stopsOutput = path.join(__dirname, '../data/metrotransit-green-line-stops.geo.json');
 
 
-// Go through and find the Green line route
-routes.features.forEach(function(f, fi) {
-  if (f.properties.route === greenLineRoute) {
 
-    // Add crs for reference
-    f.crs = routes.crs
+// Go through and find the Green line routes
+routes.features = routes.features.filter(function(r, ri) {
+  return (r.properties.route === greenLineRoute);
+});
 
-    // Save as file
-    fs.writeFile(routeOutput, JSON.stringify(f, null, 2), function(error) {
-      if (error) {
-        console.error(error);
-      }
-      else {
-        console.log('Green Line route GeoJSON found and saved.');
-      }
-    });
+// Save as file
+fs.writeFile(routeOutput, JSON.stringify(routes, null, 2), function(error) {
+  if (error) {
+    console.error(error);
+  }
+  else {
+    console.log('Green Line route GeoJSON found and saved.');
   }
 });
 

@@ -14,6 +14,37 @@ body .node-unpublished {
     padding-top: 1em;
   }
 
+  #green-line-map {
+    width: 100%;
+    height: 30em;
+
+    .greenline-route {
+      fill: green;
+      stroke: none;
+    }
+
+    .landmark-feature {
+      fill: #232323;
+      stroke: none;
+      opacity: 0.2;
+
+      &.water {
+        fill: blue;
+      }
+
+      &.landmark {
+        fill: yellow;
+      }
+
+      &.highway {
+        fill: #A1A1A1;
+      }
+
+      &.street {
+        fill: #D5D5D5;
+      }
+    }
+  }
 
   // Custom breakpoints
   @media screen and (max-width: 768px) {
