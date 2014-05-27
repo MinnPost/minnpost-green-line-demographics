@@ -11,12 +11,14 @@ var request = require('request');
 var tracts = require('../data/census-tracts-ids.json');
 
 // Variables
-var tables = [''];
-var acsGroup = 'acs2013_5yr';
+var tables = ['B01003'];
+var acsGroup = 'acs2012_5yr';
 var geomUrl = 'http://api.censusreporter.org/1.0/geo/tiger2012/[[[GEOM_ID]]]?geom=true';
-var dataUrl = 'http://api.censusreporter.org/1.0/data/show/[[[ACS_GROUP]]]?table_ids=[[[TABLE_ID]]]&geo_ids=[[[GEOM_IDS]]]';
+var dataUrl = 'http://api.censusreporter.org/1.0/data/show/[[[ACS_GROUP]]]?table_ids=[[[TABLE_IDS]]]&geo_ids=[[[GEOM_IDS]]]';
 var geometryOutput = path.join(__dirname, '../data/census-tracts.geo.json');
+var dataOutput = path.join(__dirname, '../data/census-tracts-tables.geo.json');
 var censusGeoJSON;
+var censusData;
 
 
 
@@ -49,4 +51,26 @@ tracts.forEach(function(t, ti) {
       console.error(error);
     }
   });
+});
+
+
+
+// Get census table data
+url = dataUrl.replace('[[[ACS_GROUP]]]', acsGroup);
+url = url.replace('[[[TABLE_IDS]]]', tables.join(','));
+url = url.replace('[[[GEOM_IDS]]]', tracts.join(','));
+request(url, function (error, response, body) {
+  if (!error && response.statusCode == 200) {
+    fs.writeFile(dataOutput, JSON.stringify(JSON.parse(body), null, 2), function(error) {
+      if (error) {
+        console.error(error);
+      }
+      else {
+        console.log('Census table data created.');
+      }
+    });
+  }
+  else {
+    console.error(error);
+  }
 });
