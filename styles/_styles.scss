@@ -19,29 +19,45 @@ body .node-unpublished {
     height: 30em;
 
     .greenline-route {
-      fill: green;
-      stroke: none;
+      fill: transparent;
+      stroke: green;
+      // Note that stroke width gets scaled with SVG transforms
+      stroke-width: 0.002px;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+      z-index: 100;
+    }
+
+    .stop {
+      fill: pink;
+      stroke: red;
+      stroke-width: 0.001px;
+      opacity: 0.8;
+      z-index: 110;
     }
 
     .landmark-feature {
-      fill: #232323;
+      fill: transparent;
       stroke: none;
-      opacity: 0.2;
+      opacity: 0.7;
+      stroke-width: 0.001px;
+      stroke-linejoin: round;
+      stroke-linecap: round;
 
       &.water {
         fill: blue;
       }
 
       &.landmark {
-        fill: yellow;
+        fill: orange;
       }
 
       &.highway {
-        fill: #A1A1A1;
+        stroke: #989898;
       }
 
       &.street {
-        fill: #D5D5D5;
+        stroke: #D5D5D5;
       }
     }
   }

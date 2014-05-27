@@ -61,7 +61,8 @@ define('minnpost-green-line-demographics', [
       var projection = d3.geo.albersUsa()
         .scale(150)
         .translate([width / 2, height / 2]);
-      var projectionPath = d3.geo.path().projection(projection);
+      var projectionPath = d3.geo.path().projection(projection)
+        .pointRadius(function(d) { return 0.002; });
 
       // Make group for features
       var featureGroup = svg.append('g').attr('class', 'feature-group');
@@ -73,14 +74,6 @@ define('minnpost-green-line-demographics', [
         'scale(' + 0.95 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height) + ') ' +
         'translate(' + -(b[1][0] + b[0][0]) / 2 + ',' + -(b[1][1] + b[0][1]) / 2 + ')');
 
-      // Add green line route
-      featureGroup.selectAll('.greenline-route')
-        .data(this.data.greenLine.features)
-        .enter()
-          .append('path')
-          .attr('class', 'greenline-route')
-          .attr('d', projectionPath);
-
       // Add landmarks
       featureGroup.selectAll('.landmark-feature')
         .data(topojson.feature(this.data.landmarks, this.data.landmarks.objects['landmarks.geo']).features)
@@ -89,6 +82,22 @@ define('minnpost-green-line-demographics', [
           .attr('class', function(d) {
             return 'landmark-feature ' + d.properties.type;
           })
+          .attr('d', projectionPath);
+
+      // Add green line route
+      featureGroup.selectAll('.greenline-route')
+        .data(this.data.greenLine.features)
+        .enter()
+          .append('path')
+          .attr('class', 'greenline-route')
+          .attr('d', projectionPath);
+
+      // Add stops
+      featureGroup.selectAll('.stop')
+        .data(this.data.stops.features)
+        .enter()
+          .append('path')
+          .attr('class', 'stop')
           .attr('d', projectionPath);
 
     },
