@@ -62,7 +62,7 @@ define('minnpost-green-line-demographics', [
         .scale(150)
         .translate([width / 2, height / 2]);
       var projectionPath = d3.geo.path().projection(projection)
-        .pointRadius(function(d) { return 0.002; });
+        .pointRadius(function(d) { return 0.0015; });
 
       // Make group for features
       var featureGroup = svg.append('g').attr('class', 'feature-group');
@@ -73,6 +73,14 @@ define('minnpost-green-line-demographics', [
         'translate(' + projection.translate() + ') ' +
         'scale(' + 0.95 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height) + ') ' +
         'translate(' + -(b[1][0] + b[0][0]) / 2 + ',' + -(b[1][1] + b[0][1]) / 2 + ')');
+
+      // Add Census tracts
+      featureGroup.selectAll('.census-tract')
+        .data(topojson.feature(this.data.tracts, this.data.tracts.objects['census-tracts.geo']).features)
+        .enter()
+          .append('path')
+          .attr('class', 'census-tract')
+          .attr('d', projectionPath);
 
       // Add landmarks
       featureGroup.selectAll('.landmark-feature')
@@ -109,13 +117,18 @@ define('minnpost-green-line-demographics', [
       return helpers.getLocalData([
         'metrotransit-green-line.geo.json',
         'metrotransit-green-line-stops.geo.json',
-        'landmarks.topo.json'
+        'landmarks.topo.json',
+        'census-tracts.topo.json'
       ], this.options)
-        .done(function(a, b, c) {
+        .done(function(a, b, c, d) {
           thisApp.data = thisApp.data || {};
           thisApp.data.greenLine = a[0];
           thisApp.data.stops = b[0];
           thisApp.data.landmarks = c[0];
+          thisApp.data.tracts = d[0];
+
+          // Remove loading
+          thisApp.$el.find('.loading-container').slideUp('fast');
         });
     },
 

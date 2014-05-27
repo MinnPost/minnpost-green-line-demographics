@@ -20,20 +20,27 @@ body .node-unpublished {
 
     .greenline-route {
       fill: transparent;
-      stroke: green;
+      stroke: #1D8C47;
       // Note that stroke width gets scaled with SVG transforms
-      stroke-width: 0.002px;
+      stroke-width: 0.0025px;
       stroke-linejoin: round;
       stroke-linecap: round;
       z-index: 100;
     }
 
     .stop {
-      fill: pink;
-      stroke: red;
+      fill: #C83D2D;
+      stroke: #C83D2D;
       stroke-width: 0.001px;
-      opacity: 0.8;
       z-index: 110;
+    }
+
+    .census-tract {
+      fill: #55307E;
+      fill-opacity: 0.75;
+      stroke: #55307E;
+      stroke-opacity: 0.9;
+      stroke-width: 0.0005px;
     }
 
     .landmark-feature {
@@ -45,15 +52,17 @@ body .node-unpublished {
       stroke-linecap: round;
 
       &.water {
-        fill: blue;
+        fill: #0793AB;
+        opacity: 0.45;
       }
 
       &.landmark {
-        fill: orange;
+        fill: #BCBCBC;
       }
 
       &.highway {
         stroke: #989898;
+        stroke-width: 0.0015px;
       }
 
       &.street {

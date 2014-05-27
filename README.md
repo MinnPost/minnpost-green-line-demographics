@@ -26,10 +26,11 @@ Get data sources:
 ## Data processing
 
 * Use GDAL to convert routes and stops to GeoJSON for easier processing: `ogr2ogr -f "GeoJSON" data/metrotransit-routes.geo.json data/metrotransit-routes-shps/TransitRoutes.shp -t_srs EPSG:4326 && ogr2ogr -f "GeoJSON" data/metrotransit-planned-stops.geo.json data/metrotransit-planned-stations-shps/PlannedTransitwayStations.shp -t_srs EPSG:4326;`
-* Run the following: `node data-processing/get-green-line.js`
-    * This will pull out the Green Line route from the route data and pull out the stops from the stops data.
+* Get green line data: `node data-processing/get-green-line.js`
+* Get census data: `node data-processing/get-census-tracts.js`
 * Convert to TopoJSON for network performance and to fix some polygon issues.
     * `topojson data/landmarks.geo.json -p > data/landmarks.topo.json`
+    * `topojson data/census-tracts.geo.json -p > data/census-tracts.topo.json`
 
 ## Development and running locally
 
