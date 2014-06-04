@@ -80,16 +80,14 @@ define('minnpost-green-line-demographics', [
       // Add Census tracts
       featureGroup.selectAll('.census-tract')
         .data(topojson.feature(this.data.tracts, this.data.tracts.objects['census-tracts.geo']).features)
-        .enter()
-          .append('path')
+        .enter().append('path')
           .attr('class', 'census-tract')
           .attr('d', projectionPath);
 
       // Add landmarks
       featureGroup.selectAll('.landmark-feature')
         .data(topojson.feature(this.data.landmarks, this.data.landmarks.objects['landmarks.geo']).features)
-        .enter()
-          .append('path')
+        .enter().append('path')
           .attr('class', function(d) {
             return 'landmark-feature ' + d.properties.type;
           })
@@ -98,18 +96,36 @@ define('minnpost-green-line-demographics', [
       // Add green line route
       featureGroup.selectAll('.greenline-route')
         .data(this.data.greenLine.features)
-        .enter()
-          .append('path')
+        .enter().append('path')
           .attr('class', 'greenline-route')
           .attr('d', projectionPath);
 
       // Add stops
       featureGroup.selectAll('.stop')
         .data(this.data.stops.features)
-        .enter()
-          .append('path')
+        .enter().append('path')
           .attr('class', 'stop')
-          .attr('d', projectionPath);
+          .attr('d', projectionPath)
+          // Attach path to data for later use
+          .attr('filter', function(d) { d.stop = this; });
+
+      // Make Voronoi map for hovering over stop
+      this.voronoiStops = d3.geom.voronoi()
+        .x(function(d) { return projection(d.geometry.coordinates)[0]; })
+        .y(function(d) { return projection(d.geometry.coordinates)[1]; })
+        .clipExtent([[0, 0], [width, height]]);
+
+      featureGroup.selectAll('.voronoi-stops')
+        .data(this.voronoiStops(this.data.stops.features))
+        .enter().append('path')
+          .attr('class', 'voronoi-stops')
+          .attr('d', function(d) { return 'M' + d.join('L') + 'Z'; })
+          .on('mouseover', function(d) {
+            d3.select(d.point.stop).classed('active', true);
+          })
+          .on('mouseout', function(d) {
+            d3.select(d.point.stop).classed('active', false);
+          });
 
     },
 
