@@ -40,6 +40,7 @@ define('minnpost-green-line-demographics', [
         // Get data then build app
         thisApp.getData().done(function() {
           thisApp.buildMap();
+          thisApp.handleEvents();
         });
       }, 200);
     },
@@ -55,10 +56,12 @@ define('minnpost-green-line-demographics', [
         .attr('width', width)
         .attr('height', height);
 
-      // Make projection and path handler
+      // Make projection and path handler.  Use mercator for the trueness of
+      // direction and at this scale, the area should not be warped
+      // significantly
       var projectionData = this.data.greenLine;
       var centroid = d3.geo.centroid(projectionData);
-      var projection = d3.geo.albersUsa()
+      var projection = d3.geo.mercator()
         .scale(150)
         .translate([width / 2, height / 2]);
       var projectionPath = d3.geo.path().projection(projection)
@@ -108,6 +111,26 @@ define('minnpost-green-line-demographics', [
           .attr('class', 'stop')
           .attr('d', projectionPath);
 
+    },
+
+    // Make event handling
+    handleEvents: function() {
+      var thisApp = this;
+
+      // Choosing demographics
+      this.$('.demographic').on('click', function(e) {
+        e.preventDefault();
+        var $this = $(this);
+
+        // Update demographic interface
+        thisApp.$('.demographic').removeClass('active');
+        $this.addClass('active');
+
+        // Update data
+
+      });
+
+      // Hover over stop
     },
 
     // Get data sources

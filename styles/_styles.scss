@@ -2,6 +2,9 @@
  * Main styles for: minnpost-green-line-demographics
  */
 
+$stroke-base: 0.004px;
+
+
 // This makes the unpublished background not as annoying
 body .node-unpublished {
   background-repeat: no-repeat;
@@ -11,7 +14,35 @@ body .node-unpublished {
 .mp .minnpost-green-line-demographics-container {
 
   .application-container {
-    padding-top: 1em;
+    padding-top: 2em;
+  }
+
+  .loading-container {
+    margin-bottom: 2em;
+  }
+
+  .demographics-chooser {
+    margin-bottom: 2em;
+
+    .demographic {
+      text-align: center;
+      width: 25%;
+      float: left;
+
+      &:hover {
+        background-color: #F8F8F8;
+        cursor: pointer;
+      }
+
+      &.active {
+        background-color: #CCCCCC;
+      }
+
+      .inside {
+        padding: 1em;
+      }
+    }
+
   }
 
   #green-line-map {
@@ -22,17 +53,15 @@ body .node-unpublished {
       fill: transparent;
       stroke: #1D8C47;
       // Note that stroke width gets scaled with SVG transforms
-      stroke-width: 0.0025px;
+      stroke-width: $stroke-base;
       stroke-linejoin: round;
       stroke-linecap: round;
-      z-index: 100;
     }
 
     .stop {
       fill: #C83D2D;
       stroke: #C83D2D;
       stroke-width: 0.001px;
-      z-index: 110;
     }
 
     .census-tract {
@@ -40,14 +69,14 @@ body .node-unpublished {
       fill-opacity: 0.75;
       stroke: #55307E;
       stroke-opacity: 0.9;
-      stroke-width: 0.0005px;
+      stroke-width: $stroke-base / 4;
     }
 
     .landmark-feature {
       fill: transparent;
       stroke: none;
       opacity: 0.7;
-      stroke-width: 0.001px;
+      stroke-width: $stroke-base / 4;
       stroke-linejoin: round;
       stroke-linecap: round;
 
@@ -57,16 +86,20 @@ body .node-unpublished {
       }
 
       &.landmark {
-        fill: #BCBCBC;
+        fill: #ABABAB;
       }
 
       &.highway {
-        stroke: #989898;
-        stroke-width: 0.0015px;
+        stroke: #7A7A7A;
+        stroke-width: $stroke-base / 2;
       }
 
       &.street {
-        stroke: #D5D5D5;
+        stroke: #ABABAB;
+      }
+
+      &.boundary {
+        stroke: #404040;
       }
     }
   }
