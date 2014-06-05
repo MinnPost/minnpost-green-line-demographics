@@ -22,7 +22,6 @@ define('minnpost-green-line-demographics', [
     this.el = this.options.el;
     this.$el = $(this.el);
     this.$ = function(selector) { return this.$el.find(selector); };
-    this.$content = this.$el.find('.content-container');
     this.loadApp();
   };
 
@@ -31,8 +30,41 @@ define('minnpost-green-line-demographics', [
     // Start function
     start: function() {
       var thisApp = this;
+
+      // Tract data options
+      this.sets = {
+        'pop': {
+          table: 'B01003',
+          column: 'B01003001',
+          prop: 'estimate',
+          colors: ['#c8e0dc', '#8bc1c7', '#4da0bb', '#087db2', '#0d57a0']
+        },
+        'white': {
+          table: 'B02008',
+          column: 'B02008001',
+          prop: 'by_population',
+          colors: ['#dcefd4', '#d2d99c', '#dabe66', '#ec983c', '#ff6633']
+        },
+        'income': {
+          table: 'B19013',
+          column: 'B19013001',
+          prop: 'estimate',
+          colors: ['#e6fde6', '#daf8c4', '#dbef9a', '#e7e36f', '#fbd341']
+        },
+        'transit': {
+          table: 'B08301',
+          column: 'B08301010',
+          prop: 'by_population',
+          colors: ['#e5f5ef', '#c7ebe4', '#a6e1dd', '#81d6db', '#55cbdd']
+        }
+      };
+      this.dataset = 'pop';
+
+      // Main template
       this.templateApplication = _.template(tApplication);
-      this.$el.html(this.templateApplication({}));
+      this.$el.html(this.templateApplication({
+        currentSet: this.dataset
+      }));
 
       // The DOM creation with underscore templating is
       // not synchronous, so we hack around it
@@ -47,6 +79,7 @@ define('minnpost-green-line-demographics', [
 
     // Build base D3 Map
     buildMap: function() {
+      var thisApp = this;
       var $container = this.$el.find('#green-line-map');
       var width = $container.width();
       var height = $container.height();
@@ -68,7 +101,7 @@ define('minnpost-green-line-demographics', [
         .pointRadius(function(d) { return 0.0015; });
 
       // Make group for features
-      var featureGroup = svg.append('g').attr('class', 'feature-group');
+      var featureGroup = this.featureGroup = svg.append('g').attr('class', 'feature-group');
 
       // Fit map to data
       var b = projectionPath.bounds(projectionData);
@@ -78,15 +111,17 @@ define('minnpost-green-line-demographics', [
         'translate(' + -(b[1][0] + b[0][0]) / 2 + ',' + -(b[1][1] + b[0][1]) / 2 + ')');
 
       // Add Census tracts
-      featureGroup.selectAll('.census-tract')
-        .data(topojson.feature(this.data.tracts, this.data.tracts.objects['census-tracts.geo']).features)
+      this.data.tracts = topojson.feature(this.data.tracts, this.data.tracts.objects['census-tracts.geo']);
+      this.tracts = featureGroup.selectAll('.census-tract')
+        .data(this.data.tracts.features)
         .enter().append('path')
           .attr('class', 'census-tract')
           .attr('d', projectionPath);
 
       // Add landmarks
+      this.data.landmarks = topojson.feature(this.data.landmarks, this.data.landmarks.objects['landmarks.geo']);
       featureGroup.selectAll('.landmark-feature')
-        .data(topojson.feature(this.data.landmarks, this.data.landmarks.objects['landmarks.geo']).features)
+        .data(this.data.landmarks.features)
         .enter().append('path')
           .attr('class', function(d) {
             return 'landmark-feature ' + d.properties.type;
@@ -122,11 +157,20 @@ define('minnpost-green-line-demographics', [
           .attr('d', function(d) { return 'M' + d.join('L') + 'Z'; })
           .on('mouseover', function(d) {
             d3.select(d.point.stop).classed('active', true);
+            thisApp.updateTooltip({
+              stop: d.point.properties.Station + ' station'
+            });
           })
           .on('mouseout', function(d) {
             d3.select(d.point.stop).classed('active', false);
+            thisApp.updateTooltip(false);
           });
 
+      // Make scales and legends
+      this.makeLegendsScales();
+
+      // Update tracts
+      this.updateTracts();
     },
 
     // Make event handling
@@ -143,10 +187,75 @@ define('minnpost-green-line-demographics', [
         $this.addClass('active');
 
         // Update data
-
+        thisApp.dataset = $this.data('set');
+        thisApp.updateTracts();
       });
+    },
 
-      // Hover over stop
+    // Legend and scales
+    makeLegendsScales: function() {
+      _.each(this.sets, function(s, si) {
+        // Accessor
+        s.access = function(d) { return d.properties.data[s.table][s.prop][s.column]; };
+
+        // Scale
+        s.scale = d3.scale.quantile()
+          .domain(this.data.tracts.features.map(s.access).sort())
+          .range(s.colors);
+
+        // Draw legend
+        s.legend = d3.select('.demographic.' + si + ' .legend')
+          .selectAll('.legend-block')
+          .data(s.scale.range())
+          .enter().append('div')
+            .classed('legend-block', true)
+            .attr('title', function(d) { return d; })
+            .style('background-color', function(d) { return d; });
+
+        // Set new properties
+        this.sets[si] = s;
+      }, this);
+    },
+
+    // Update tracts
+    updateTracts: function() {
+      var thisApp = this;
+      var dataset = this.sets[this.dataset];
+
+      this.tracts
+        .style('fill', function(d) { return dataset.scale(dataset.access(d)); });
+
+        /*
+        Can;t find a way to pass mouse events down passed voronoi layers
+        //.on('mouseover', null)
+        .on('mouseover', function(d) {
+          console.log(getProp(d));
+          thisApp.updateTooltip({
+            tract: 'Tract: ' + getProp(d)
+          });
+        });
+        */
+    },
+
+    // Update tooltip
+    updateTooltip: function(content) {
+      var $tooltip = this.$('.tooltip');
+      var $stop = this.$('.tooltip .stop-info');
+      var $tract = this.$('.tooltip .tract-info');
+
+      if (content === false) {
+        $tooltip.hide();
+      }
+      else {
+        $tooltip.show();
+      }
+
+      if (_.isObject(content) && content.stop) {
+        $stop.html(content.stop);
+      }
+      if (_.isObject(content) && content.tract) {
+        $tract.html(content.tract);
+      }
     },
 
     // Get data sources

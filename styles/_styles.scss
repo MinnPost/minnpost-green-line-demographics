@@ -41,13 +41,44 @@ body .node-unpublished {
       .inside {
         padding: 1em;
       }
-    }
 
+      .legend {
+        margin-top: .5em;
+
+        .legend-block {
+          display: inline-block;
+          width: 10%;
+          margin: 0 3px 3px 0;
+          height: 1em;
+        }
+      }
+    }
+  }
+
+  .map-container {
+    position: relative;
+
+    .tooltip-container {
+      position: absolute;
+      top: 0;
+      right: 0;
+
+      .tooltip {
+        display: none;
+        min-width: 200px;
+        margin: .5em .5em 0 0;
+        padding: .5em .5em;
+        background-color: rgba(230, 230, 230, 0.85);
+        border: 1px solid #7A7A7A;
+        border-radius: 3px;
+      }
+    }
   }
 
   #green-line-map {
     width: 100%;
     height: 30em;
+    pointer-events: none;
 
     .greenline-route {
       fill: transparent;
@@ -70,10 +101,11 @@ body .node-unpublished {
 
     .census-tract {
       fill: #55307E;
-      fill-opacity: 0.75;
-      stroke: #55307E;
-      stroke-opacity: 0.9;
-      stroke-width: $stroke-base / 4;
+      fill-opacity: 0.85;
+      stroke: #FFFFFF;
+      stroke-opacity: 0.75;
+      stroke-width: $stroke-base / 20;
+      pointer-events: all;
     }
 
     .landmark-feature {
@@ -91,6 +123,7 @@ body .node-unpublished {
 
       &.landmark {
         fill: #ABABAB;
+        fill: none;
       }
 
       &.highway {
@@ -111,6 +144,7 @@ body .node-unpublished {
       fill: transparent;
       stroke-width: 0;
       stroke: none;
+      pointer-events: all;
     }
   }
 

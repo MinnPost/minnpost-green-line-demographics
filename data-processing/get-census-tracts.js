@@ -20,43 +20,49 @@ var acsGroup = 'acs2012_5yr';
 var geomUrl = 'http://api.censusreporter.org/1.0/geo/tiger2012/[[[GEOM_ID]]]?geom=true';
 var dataUrl = 'http://api.censusreporter.org/1.0/data/show/[[[ACS_GROUP]]]?table_ids=[[[TABLE_IDS]]]&geo_ids=[[[GEOM_IDS]]]';
 var geometryOutput = path.join(__dirname, '../data/census-tracts.geo.json');
-var dataOutput = path.join(__dirname, '../data/census-tracts-tables.geo.json');
-var censusGeoJSON;
-var censusData;
 
 
 
+// Get gemoetries
+function getGeometries(censusData) {
+  var censusGeoJSON = { type: 'FeatureCollection', features: [] };
 
-// Let's get geometries first
-censusGeoJSON = { type: 'FeatureCollection', features: [] };
-function geometriesRecieved(geometry) {
-  censusGeoJSON.features.push(geometry);
-  if (censusGeoJSON.features.length >= tracts.length) {
-    // Save file
-    fs.writeFile(geometryOutput, JSON.stringify(censusGeoJSON, null, 2), function(error) {
-      if (error) {
-        console.error(error);
+  // Handle reciving geometry
+  function geometriesRecieved(geometry) {
+    censusGeoJSON.features.push(geometry);
+
+    // Save if we have all
+    if (censusGeoJSON.features.length >= tracts.length) {
+      // Match census data with gemoetries
+      censusGeoJSON.features.forEach(function(f, fi) {
+        f.properties.data = censusData[f.properties.full_geoid];
+      });
+
+      // Save file
+      fs.writeFile(geometryOutput, JSON.stringify(censusGeoJSON, null, 2), function(error) {
+        if (error) {
+          console.error(error);
+        }
+        else {
+          console.log('Census tracts GeoJSON created.');
+        }
+      });
+    }
+  }
+
+  // Go through each tract and add to collection
+  tracts.forEach(function(t, ti) {
+    url = geomUrl.replace('[[[GEOM_ID]]]', t);
+    request(url, function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+        geometriesRecieved(JSON.parse(body));
       }
       else {
-        console.log('Census tracts GeoJSON created.');
+        console.error(error);
       }
     });
-  }
-}
-
-// Go through each tract, get geometry, and then test if we have them all
-tracts.forEach(function(t, ti) {
-  url = geomUrl.replace('[[[GEOM_ID]]]', t);
-  request(url, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-      geometriesRecieved(JSON.parse(body));
-    }
-    else {
-      console.error(error);
-    }
   });
-});
-
+}
 
 
 // Get census table data
@@ -86,14 +92,8 @@ request(url, function (error, response, body) {
       data[tract].B08301.by_population.B08301010 = data[tract].B08301.estimate.B08301010 / population;
     });
 
-    fs.writeFile(dataOutput, JSON.stringify(data, null, 2), function(error) {
-      if (error) {
-        console.error(error);
-      }
-      else {
-        console.log('Census table data created.');
-      }
-    });
+    // Get geomoetries and put with data
+    getGeometries(data);
   }
   else {
     console.error(error);

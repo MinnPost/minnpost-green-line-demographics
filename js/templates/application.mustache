@@ -8,32 +8,49 @@
     </div>
 
     <div class="demographics-chooser cf">
-      <div class="demographic income">
+      <div class="demographic income <%= (currentSet == 'income') ? 'active' : '' %>" data-set="income">
         <div class="inside">
-          Household income
+          <div>Household income</div>
+          <div class="caption">Median household income for each tract.</div>
+          <div class="legend"></div>
         </div>
       </div>
 
-      <div class="demographic non-white">
+      <div class="demographic white <%= (currentSet == 'white') ? 'active' : '' %>" data-set="white">
         <div class="inside">
-          Non-white
+          <div>Non-white</div>
+          <div class="caption">Percentage of population that is non-white.</div>
+          <div class="legend"></div>
         </div>
       </div>
 
-      <div class="demographic population-density">
+      <div class="demographic pop <%= (currentSet == 'pop') ? 'active' : '' %>" data-set="pop">
         <div class="inside">
-          Population density
+          <div>Population density</div>
+          <div class="caption">Population per square X.</div>
+          <div class="legend"></div>
         </div>
       </div>
 
-      <div class="demographic transit-public">
+      <div class="demographic transit <%= (currentSet == 'transit') ? 'active' : '' %>" data-set="transit">
         <div class="inside">
-          Public transit
+          <div>Public transit</div>
+          <div class="caption">Percentage of population that uses public transportation to commute to work.</div>
+          <div class="legend"></div>
         </div>
       </div>
     </div>
 
-    <div id="green-line-map"></div>
+    <div class="map-container">
+      <div class="tooltip-container">
+        <div class="tooltip">
+          <div class="stop-info"></div>
+          <div class="tract-info"></div>
+        </div>
+      </div>
+
+      <div id="green-line-map"></div>
+    </div>
 
   </div>
 
