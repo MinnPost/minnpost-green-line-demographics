@@ -2,7 +2,10 @@
  * Main styles for: minnpost-green-line-demographics
  */
 
-$stroke-base: 0.004px;
+// CSS-Clean which is used by the grunt-css-min module cuts off pixel
+// decimal points, so we use em's.   :(
+// https://github.com/GoalSmashers/clean-css/issues/287
+$stroke-base: 0.0001em;
 
 
 // This makes the unpublished background not as annoying
@@ -84,7 +87,7 @@ body .node-unpublished {
       fill: transparent;
       stroke: #1D8C47;
       // Note that stroke width gets scaled with SVG transforms
-      stroke-width: $stroke-base;
+      stroke-width: 0.00015em;
       stroke-linejoin: round;
       stroke-linecap: round;
     }
@@ -92,10 +95,12 @@ body .node-unpublished {
     .stop {
       fill: #C83D2D;
       stroke: #C83D2D;
-      stroke-width: $stroke-base * 1.1;
+      stroke-width: 0.0002em;
 
       &.active {
-        stroke-width: $stroke-base * 2;
+        fill: lighten(#C83D2D, 10);
+        stroke: lighten(#C83D2D, 10);
+        stroke-width: 0.0003em;
       }
     }
 
@@ -104,7 +109,7 @@ body .node-unpublished {
       fill-opacity: 0.85;
       stroke: #FFFFFF;
       stroke-opacity: 0.75;
-      stroke-width: $stroke-base / 20;
+      stroke-width: 0.000025em;
       pointer-events: all;
     }
 
@@ -112,7 +117,7 @@ body .node-unpublished {
       fill: transparent;
       stroke: none;
       opacity: 0.7;
-      stroke-width: $stroke-base / 4;
+      stroke-width: 0.00005em;
       stroke-linejoin: round;
       stroke-linecap: round;
 
@@ -128,7 +133,7 @@ body .node-unpublished {
 
       &.highway {
         stroke: #7A7A7A;
-        stroke-width: $stroke-base / 2;
+        stroke-width: 0.0001em;
       }
 
       &.street {

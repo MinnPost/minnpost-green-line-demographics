@@ -58,20 +58,6 @@
       ],
       "returns": "_"
     },
-    "ractive": {
-      "rname": "ractive",
-      "js": [
-        "ractive/ractive"
-      ],
-      "returns": "Ractive"
-    },
-    "ractive-events-tap": {
-      "rname": "ractive-events-tap",
-      "js": [
-        "ractive-events-tap/ractive-events-tap"
-      ],
-      "returns": "RactiveEventsTap"
-    },
     "minnpost-styles": {
       "rname": "mpStyles",
       "css": [
@@ -95,6 +81,20 @@
         "minnpost-styles/dist/minnpost-styles.formatters"
       ],
       "returns": "mpFormatters"
+    },
+    "d3": {
+      "rname": "d3",
+      "js": [
+        "d3/d3"
+      ],
+      "returns": "d3"
+    },
+    "topojson": {
+      "rname": "topojson",
+      "js": [
+        "topojson/topojson"
+      ],
+      "returns": "topojson"
     }
   }
 }
