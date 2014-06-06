@@ -52,12 +52,13 @@ body .node-unpublished {
       .legend {
         margin-top: .5em;
 
-        .legend-block {
+        .legend-block,
+        .legend-block-end {
           display: inline-block;
-          min-width: 10%;
-          margin: 0 3px 3px 0;
-          height: 2.25em;
-          font-size: .75em;
+          min-width: 8%;
+          margin: 0 5px 5px 0;
+          height: 2.1em;
+          font-size: .7em;
           vertical-align: top;
         }
       }
@@ -73,8 +74,9 @@ body .node-unpublished {
       right: 0;
 
       .tooltip {
+        text-align: right;
         display: none;
-        min-width: 200px;
+        min-width: 100px;
         margin: .5em .5em 0 0;
         padding: .5em .5em;
         background-color: rgba(230, 230, 230, 0.85);

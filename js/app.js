@@ -38,7 +38,7 @@ define('minnpost-green-line-demographics', [
           column: 'B01003001',
           prop: 'by_area',
           colors: ['#c8e0dc', '#8bc1c7', '#4da0bb', '#087db2', '#0d57a0'],
-          format: d3.format(',.2f')
+          format: d3.format(',.0f')
         },
         'white': {
           table: 'B02008',
@@ -213,7 +213,7 @@ define('minnpost-green-line-demographics', [
         // Add ends
         d3.select('.demographic.' + si + ' .legend')
           .append('div')
-          .attr('class', 'legend-block end')
+          .attr('class', 'legend-block-end')
           .text(s.format(values[0]));
 
         // Draw colors legend
@@ -231,7 +231,7 @@ define('minnpost-green-line-demographics', [
         // Add ends
         d3.select('.demographic.' + si + ' .legend')
           .append('div')
-          .attr('class', 'legend-block end')
+          .attr('class', 'legend-block-end')
           .text(s.format(values[values.length - 1]));
 
         // Set new properties
