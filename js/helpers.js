@@ -39,7 +39,10 @@ define('helpers', ['jquery', 'underscore'],
    * the AJAX request, while the other are from the application.
    */
   helpers.jsonpRequest = function(requestOptions, appOptions) {
+    var options = requestOptions || {};
     options.dataType = 'jsonp';
+
+    /*
     options.jsonpCallback = 'mpServerSideCachingHelper' +
       _.hash(options.url);
 
@@ -48,6 +51,7 @@ define('helpers', ['jquery', 'underscore'],
       options.url = appOptions.remoteProxy + encodeURIComponent(options.url);
       options.cache = true;
     }
+    */
 
     return $.ajax.apply($, [options]);
   };
@@ -78,7 +82,7 @@ define('helpers', ['jquery', 'underscore'],
 
       if (useJSONP) {
         defer = helpers.jsonpRequest({
-          url: proxyPrefix + encodeURI(options.paths.data + d)
+          url: options.remoteProxy + encodeURI(options.paths.data + d)
         }, options);
       }
       else {

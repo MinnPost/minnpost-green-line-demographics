@@ -8,9 +8,17 @@
     </div>
 
     <div class="demographics-chooser cf">
+      <div class="demographic pop <%= (currentSet == 'pop') ? 'active' : '' %>" data-set="pop">
+        <div class="inside">
+          <div class="strong">Population density</div>
+          <div class="caption">Population per square X.</div>
+          <div class="legend"></div>
+        </div>
+      </div>
+
       <div class="demographic income <%= (currentSet == 'income') ? 'active' : '' %>" data-set="income">
         <div class="inside">
-          <div>Household income</div>
+          <div class="strong">Household income</div>
           <div class="caption">Median household income for each tract.</div>
           <div class="legend"></div>
         </div>
@@ -18,23 +26,15 @@
 
       <div class="demographic white <%= (currentSet == 'white') ? 'active' : '' %>" data-set="white">
         <div class="inside">
-          <div>Non-white</div>
+          <div class="strong">Non-white</div>
           <div class="caption">Percentage of population that is non-white.</div>
-          <div class="legend"></div>
-        </div>
-      </div>
-
-      <div class="demographic pop <%= (currentSet == 'pop') ? 'active' : '' %>" data-set="pop">
-        <div class="inside">
-          <div>Population density</div>
-          <div class="caption">Population per square X.</div>
           <div class="legend"></div>
         </div>
       </div>
 
       <div class="demographic transit <%= (currentSet == 'transit') ? 'active' : '' %>" data-set="transit">
         <div class="inside">
-          <div>Public transit</div>
+          <div class="strong">Public transit</div>
           <div class="caption">Percentage of population that uses public transportation to commute to work.</div>
           <div class="legend"></div>
         </div>

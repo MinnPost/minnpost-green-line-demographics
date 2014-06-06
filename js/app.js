@@ -37,25 +37,29 @@ define('minnpost-green-line-demographics', [
           table: 'B01003',
           column: 'B01003001',
           prop: 'estimate',
-          colors: ['#c8e0dc', '#8bc1c7', '#4da0bb', '#087db2', '#0d57a0']
+          colors: ['#c8e0dc', '#8bc1c7', '#4da0bb', '#087db2', '#0d57a0'],
+          format: d3.format(',.0f')
         },
         'white': {
           table: 'B02008',
           column: 'B02008001',
           prop: 'by_population',
-          colors: ['#dcefd4', '#d2d99c', '#dabe66', '#ec983c', '#ff6633']
+          colors: ['#dcefd4', '#d2d99c', '#dabe66', '#ec983c', '#ff6633'],
+          format: d3.format('%,.2f')
         },
         'income': {
           table: 'B19013',
           column: 'B19013001',
           prop: 'estimate',
-          colors: ['#e6fde6', '#daf8c4', '#dbef9a', '#e7e36f', '#fbd341']
+          colors: ['#e6fde6', '#daf8c4', '#dbef9a', '#e7e36f', '#fbd341'],
+          format: d3.format('$,.0f')
         },
         'transit': {
           table: 'B08301',
           column: 'B08301010',
           prop: 'by_population',
-          colors: ['#e5f5ef', '#c7ebe4', '#a6e1dd', '#81d6db', '#55cbdd']
+          colors: ['#e5f5ef', '#c7ebe4', '#a6e1dd', '#81d6db', '#55cbdd'],
+          format: d3.format('%,.2f')
         }
       };
       this.dataset = 'pop';
@@ -111,7 +115,8 @@ define('minnpost-green-line-demographics', [
         'translate(' + -(b[1][0] + b[0][0]) / 2 + ',' + -(b[1][1] + b[0][1]) / 2 + ')');
 
       // Add Census tracts
-      this.data.tracts = topojson.feature(this.data.tracts, this.data.tracts.objects['census-tracts.geo']);
+      this.data.tracts = topojson.feature(this.data.tractsTopo,
+        this.data.tractsTopo.objects['census-tracts.geo']);
       this.tracts = featureGroup.selectAll('.census-tract')
         .data(this.data.tracts.features)
         .enter().append('path')
@@ -119,7 +124,8 @@ define('minnpost-green-line-demographics', [
           .attr('d', projectionPath);
 
       // Add landmarks
-      this.data.landmarks = topojson.feature(this.data.landmarks, this.data.landmarks.objects['landmarks.geo']);
+      this.data.landmarks = topojson.feature(this.data.landmarksTopo,
+        this.data.landmarksTopo.objects['landmarks.geo']);
       featureGroup.selectAll('.landmark-feature')
         .data(this.data.landmarks.features)
         .enter().append('path')
@@ -199,18 +205,34 @@ define('minnpost-green-line-demographics', [
         s.access = function(d) { return d.properties.data[s.table][s.prop][s.column]; };
 
         // Scale
+        var values = this.data.tracts.features.map(s.access).sort();
         s.scale = d3.scale.quantile()
-          .domain(this.data.tracts.features.map(s.access).sort())
+          .domain(values)
           .range(s.colors);
 
-        // Draw legend
+        // Add ends
+        d3.select('.demographic.' + si + ' .legend')
+          .append('div')
+          .attr('class', 'legend-block end')
+          .text(s.format(values[0]));
+
+        // Draw colors legend
         s.legend = d3.select('.demographic.' + si + ' .legend')
           .selectAll('.legend-block')
           .data(s.scale.range())
           .enter().append('div')
             .classed('legend-block', true)
-            .attr('title', function(d) { return d; })
+            .attr('title', function(d, i) {
+              var range = s.scale.invertExtent(d);
+              return '>= ' + s.format(range[0]) + ' and < ' + s.format(range[1]);
+            })
             .style('background-color', function(d) { return d; });
+
+        // Add ends
+        d3.select('.demographic.' + si + ' .legend')
+          .append('div')
+          .attr('class', 'legend-block end')
+          .text(s.format(values[values.length - 1]));
 
         // Set new properties
         this.sets[si] = s;
@@ -223,6 +245,8 @@ define('minnpost-green-line-demographics', [
       var dataset = this.sets[this.dataset];
 
       this.tracts
+        .transition()
+        .duration(300)
         .style('fill', function(d) { return dataset.scale(dataset.access(d)); });
 
         /*
@@ -272,8 +296,8 @@ define('minnpost-green-line-demographics', [
           thisApp.data = thisApp.data || {};
           thisApp.data.greenLine = a[0];
           thisApp.data.stops = b[0];
-          thisApp.data.landmarks = c[0];
-          thisApp.data.tracts = d[0];
+          thisApp.data.landmarksTopo = c[0];
+          thisApp.data.tractsTopo = d[0];
 
           // Remove loading
           thisApp.$el.find('.loading-container').slideUp('fast');
@@ -283,7 +307,7 @@ define('minnpost-green-line-demographics', [
     // Default options
     defaultOptions: {
       projectName: 'minnpost-green-line-demographics',
-      remoteProxy: null,
+      remoteProxy: 'http://mp-jsonproxy.herokuapp.com/proxy?callback=?&url=',
       el: '.minnpost-green-line-demographics-container',
       availablePaths: {
         local: {

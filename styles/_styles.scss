@@ -45,14 +45,20 @@ body .node-unpublished {
         padding: 1em;
       }
 
+      .caption {
+        min-height: 4em;
+      }
+
       .legend {
         margin-top: .5em;
 
         .legend-block {
           display: inline-block;
-          width: 10%;
+          min-width: 10%;
           margin: 0 3px 3px 0;
-          height: 1em;
+          height: 2.25em;
+          font-size: .75em;
+          vertical-align: top;
         }
       }
     }
@@ -80,7 +86,7 @@ body .node-unpublished {
 
   #green-line-map {
     width: 100%;
-    height: 30em;
+    height: 20em;
     pointer-events: none;
 
     .greenline-route {
@@ -105,12 +111,18 @@ body .node-unpublished {
     }
 
     .census-tract {
-      fill: #55307E;
+      fill: #FFFFFF;
       fill-opacity: 0.85;
       stroke: #FFFFFF;
       stroke-opacity: 0.75;
       stroke-width: 0.000025em;
       pointer-events: all;
+    }
+
+    .census-tract-outline {
+      fill: none;
+      stroke: #222222;
+      stroke-width: 0.000025em;
     }
 
     .landmark-feature {
@@ -154,6 +166,21 @@ body .node-unpublished {
   }
 
   // Custom breakpoints
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 875px) {
+
+    .demographics-chooser .demographic {
+      width: 50%;
+    }
+  }
+
+  @media screen and (max-width: 475px) {
+
+    .demographics-chooser .demographic {
+      width: 100%;
+
+      .caption {
+        min-height: 0;
+      }
+    }
   }
 }
