@@ -60,6 +60,7 @@ body .node-unpublished {
           height: 2.1em;
           font-size: .7em;
           vertical-align: top;
+          border-radius: 2px;
         }
       }
     }
@@ -79,9 +80,8 @@ body .node-unpublished {
         min-width: 100px;
         margin: .5em .5em 0 0;
         padding: .5em .5em;
-        background-color: rgba(230, 230, 230, 0.85);
-        border: 1px solid #7A7A7A;
-        border-radius: 3px;
+        background-color: #CCCCCC;
+        background-color: rgba(204, 204, 204, 0.9);
       }
     }
   }

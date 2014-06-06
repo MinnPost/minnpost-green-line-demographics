@@ -44,21 +44,21 @@ define('minnpost-green-line-demographics', [
           table: 'B02008',
           column: 'B02008001',
           prop: 'by_population',
-          colors: ['#dcefd4', '#d2d99c', '#dabe66', '#ec983c', '#ff6633'],
+          colors: ['#e6fde6', '#daf8c4', '#dbef9a', '#e7e36f', '#fbd341'],
           format: d3.format('%,.2f')
         },
         'income': {
           table: 'B19013',
           column: 'B19013001',
           prop: 'estimate',
-          colors: ['#e6fde6', '#daf8c4', '#dbef9a', '#e7e36f', '#fbd341'],
+          colors: ['#e5f5ef', '#c7ebe4', '#a6e1dd', '#81d6db', '#55cbdd'],
           format: d3.format('$,.0f')
         },
         'transit': {
           table: 'B08301',
           column: 'B08301010',
           prop: 'by_population',
-          colors: ['#e5f5ef', '#c7ebe4', '#a6e1dd', '#81d6db', '#55cbdd'],
+          colors: ['#dcefd4', '#d2d99c', '#dabe66', '#ec983c', '#ff6633'],
           format: d3.format('%,.2f')
         }
       };
@@ -201,8 +201,10 @@ define('minnpost-green-line-demographics', [
     // Legend and scales
     makeLegendsScales: function() {
       _.each(this.sets, function(s, si) {
-        // Accessor
+        // Accessorors
         s.access = function(d) { return d.properties.data[s.table][s.prop][s.column]; };
+        s.estimate = function(d) { return d.properties.data[s.table].estimate[s.column]; };
+        s.error = function(d) { return d.properties.data[s.table].error[s.column]; };
 
         // Scale
         var values = this.data.tracts.features.map(s.access).sort();
@@ -233,6 +235,20 @@ define('minnpost-green-line-demographics', [
           .append('div')
           .attr('class', 'legend-block-end')
           .text(s.format(values[values.length - 1]));
+
+        // While we are here, we should figure out the average
+        // margin of error
+        s.avg_error = (this.data.tracts.features.map(function(d, di) {
+          var estimate = s.estimate(d);
+          var error = s.error(d);
+          return error / estimate;
+        }).reduce(function(p, c, i, a) {
+          return p + c;
+        }, 0)) / this.data.tracts.features.length;
+
+        // Show margin of error
+        s.legend = d3.select('.demographic.' + si + ' .margin')
+          .text(d3.format('%,.3f')(s.avg_error));
 
         // Set new properties
         this.sets[si] = s;
