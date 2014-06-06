@@ -1,0 +1,154 @@
+/**
+ * Styles for: minnpost-green-line-demographics
+ */
+/**
+ * Variables for: minnpost-green-line-demographics
+ */
+/**
+ * Mixins for: minnpost-green-line-demographics
+ */
+/**
+ * Easily make cross brower inline block.
+ */
+/**
+ * Main styles for: minnpost-green-line-demographics
+ */
+body .node-unpublished {
+  background-repeat: no-repeat;
+}
+
+.mp .minnpost-green-line-demographics-container .application-container {
+  padding-top: 2em;
+}
+.mp .minnpost-green-line-demographics-container .loading-container {
+  margin-bottom: 2em;
+}
+.mp .minnpost-green-line-demographics-container .demographics-chooser {
+  margin-bottom: 2em;
+}
+.mp .minnpost-green-line-demographics-container .demographics-chooser .demographic {
+  text-align: center;
+  width: 25%;
+  float: left;
+}
+.mp .minnpost-green-line-demographics-container .demographics-chooser .demographic:hover {
+  background-color: #F8F8F8;
+  cursor: pointer;
+}
+.mp .minnpost-green-line-demographics-container .demographics-chooser .demographic.active {
+  background-color: #CCCCCC;
+}
+.mp .minnpost-green-line-demographics-container .demographics-chooser .demographic .inside {
+  padding: 1em;
+}
+.mp .minnpost-green-line-demographics-container .demographics-chooser .demographic .caption {
+  min-height: 4em;
+}
+.mp .minnpost-green-line-demographics-container .demographics-chooser .demographic .legend {
+  margin-top: .5em;
+}
+.mp .minnpost-green-line-demographics-container .demographics-chooser .demographic .legend .legend-block {
+  display: inline-block;
+  min-width: 10%;
+  margin: 0 3px 3px 0;
+  height: 2.25em;
+  font-size: .75em;
+  vertical-align: top;
+}
+.mp .minnpost-green-line-demographics-container .map-container {
+  position: relative;
+}
+.mp .minnpost-green-line-demographics-container .map-container .tooltip-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.mp .minnpost-green-line-demographics-container .map-container .tooltip-container .tooltip {
+  display: none;
+  min-width: 200px;
+  margin: .5em .5em 0 0;
+  padding: .5em .5em;
+  background-color: rgba(230, 230, 230, 0.85);
+  border: 1px solid #7A7A7A;
+  border-radius: 3px;
+}
+.mp .minnpost-green-line-demographics-container #green-line-map {
+  width: 100%;
+  height: 20em;
+  pointer-events: none;
+}
+.mp .minnpost-green-line-demographics-container #green-line-map .greenline-route {
+  fill: transparent;
+  stroke: #1D8C47;
+  stroke-width: 0.00015em;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.mp .minnpost-green-line-demographics-container #green-line-map .stop {
+  fill: #C83D2D;
+  stroke: #C83D2D;
+  stroke-width: 0.0002em;
+}
+.mp .minnpost-green-line-demographics-container #green-line-map .stop.active {
+  fill: #d85e50;
+  stroke: #d85e50;
+  stroke-width: 0.0003em;
+}
+.mp .minnpost-green-line-demographics-container #green-line-map .census-tract {
+  fill: #FFFFFF;
+  fill-opacity: 0.85;
+  stroke: #FFFFFF;
+  stroke-opacity: 0.75;
+  stroke-width: 0.000025em;
+  pointer-events: all;
+}
+.mp .minnpost-green-line-demographics-container #green-line-map .census-tract-outline {
+  fill: none;
+  stroke: #222222;
+  stroke-width: 0.000025em;
+}
+.mp .minnpost-green-line-demographics-container #green-line-map .landmark-feature {
+  fill: transparent;
+  stroke: none;
+  opacity: 0.7;
+  stroke-width: 0.00005em;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.mp .minnpost-green-line-demographics-container #green-line-map .landmark-feature.water {
+  fill: #0793AB;
+  opacity: 0.45;
+}
+.mp .minnpost-green-line-demographics-container #green-line-map .landmark-feature.landmark {
+  fill: #ABABAB;
+  fill: none;
+}
+.mp .minnpost-green-line-demographics-container #green-line-map .landmark-feature.highway {
+  stroke: #7A7A7A;
+  stroke-width: 0.0001em;
+}
+.mp .minnpost-green-line-demographics-container #green-line-map .landmark-feature.street {
+  stroke: #ABABAB;
+}
+.mp .minnpost-green-line-demographics-container #green-line-map .landmark-feature.boundary {
+  stroke: #404040;
+}
+.mp .minnpost-green-line-demographics-container #green-line-map .voronoi-stops {
+  fill: transparent;
+  stroke-width: 0;
+  stroke: none;
+  pointer-events: all;
+}
+@media screen and (max-width: 875px) {
+  .mp .minnpost-green-line-demographics-container .demographics-chooser .demographic {
+    width: 50%;
+  }
+}
+@media screen and (max-width: 475px) {
+  .mp .minnpost-green-line-demographics-container .demographics-chooser .demographic {
+    width: 100%;
+  }
+  .mp .minnpost-green-line-demographics-container .demographics-chooser .demographic .caption {
+    min-height: 0;
+  }
+}
