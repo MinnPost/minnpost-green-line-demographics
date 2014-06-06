@@ -36,9 +36,9 @@ define('minnpost-green-line-demographics', [
         'pop': {
           table: 'B01003',
           column: 'B01003001',
-          prop: 'estimate',
+          prop: 'by_area',
           colors: ['#c8e0dc', '#8bc1c7', '#4da0bb', '#087db2', '#0d57a0'],
-          format: d3.format(',.0f')
+          format: d3.format(',.2f')
         },
         'white': {
           table: 'B02008',

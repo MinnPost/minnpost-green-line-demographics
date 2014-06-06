@@ -13,7 +13,8 @@
     "email": "data@minnpost.com"
   },
   "dependencies": {
-    "request": "^2.36.0"
+    "request": "^2.36.0",
+    "geojson-area": "^0.1.0"
   },
   "devDependencies": {
     "grunt": "~0.4.4",
