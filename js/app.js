@@ -37,6 +37,7 @@ define('minnpost-green-line-demographics', [
           table: 'B01003',
           column: 'B01003001',
           prop: 'by_area',
+          error_prop: 'by_area_error',
           colors: ['#c8e0dc', '#8bc1c7', '#4da0bb', '#087db2', '#0d57a0'],
           format: d3.format(',.0f')
         },
@@ -44,6 +45,7 @@ define('minnpost-green-line-demographics', [
           table: 'B02008',
           column: 'B02008001',
           prop: 'by_population',
+          error_prop: 'by_population_error',
           colors: ['#e6fde6', '#daf8c4', '#dbef9a', '#e7e36f', '#fbd341'],
           format: d3.format('%,.2f')
         },
@@ -51,6 +53,7 @@ define('minnpost-green-line-demographics', [
           table: 'B19013',
           column: 'B19013001',
           prop: 'estimate',
+          error_prop: 'error',
           colors: ['#e5f5ef', '#c7ebe4', '#a6e1dd', '#81d6db', '#55cbdd'],
           format: d3.format('$,.0f')
         },
@@ -58,6 +61,7 @@ define('minnpost-green-line-demographics', [
           table: 'B08301',
           column: 'B08301010',
           prop: 'by_population',
+          error_prop: 'by_population_error',
           colors: ['#dcefd4', '#d2d99c', '#dabe66', '#ec983c', '#ff6633'],
           format: d3.format('%,.2f')
         }
@@ -204,7 +208,7 @@ define('minnpost-green-line-demographics', [
         // Accessorors
         s.access = function(d) { return d.properties.data[s.table][s.prop][s.column]; };
         s.estimate = function(d) { return d.properties.data[s.table].estimate[s.column]; };
-        s.error = function(d) { return d.properties.data[s.table].error[s.column]; };
+        s.error = function(d) { return d.properties.data[s.table][s.error_prop][s.column]; };
 
         // Scale
         var values = this.data.tracts.features.map(s.access).sort();
@@ -238,17 +242,13 @@ define('minnpost-green-line-demographics', [
 
         // While we are here, we should figure out the average
         // margin of error
-        s.avg_error = (this.data.tracts.features.map(function(d, di) {
-          var estimate = s.estimate(d);
-          var error = s.error(d);
-          return error / estimate;
-        }).reduce(function(p, c, i, a) {
+        s.avg_error = (this.data.tracts.features.map(s.error).reduce(function(p, c, i, a) {
           return p + c;
         }, 0)) / this.data.tracts.features.length;
 
         // Show margin of error
         s.legend = d3.select('.demographic.' + si + ' .margin')
-          .text(d3.format('%,.3f')(s.avg_error));
+          .text(s.format(s.avg_error));
 
         // Set new properties
         this.sets[si] = s;

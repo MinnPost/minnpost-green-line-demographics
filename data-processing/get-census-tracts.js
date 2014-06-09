@@ -81,12 +81,19 @@ function getData(callback) {
           'B08301010': data[tract].B08301.error.B08301010
         };
 
-        // Normalize by population.  Reverse for white
+        // Normalize white by population but reverse to represent people of
+        // color
         var population = data[tract].B01003.estimate.B01003001;
         data[tract].B02008.by_population = {};
         data[tract].B02008.by_population.B02008001 = 1 - (data[tract].B02008.estimate.B02008001 / population);
+        data[tract].B02008.by_population_error = {};
+        data[tract].B02008.by_population_error.B02008001 = data[tract].B02008.error.B02008001 / population;
+
+        // Normalize means of transportation by population
         data[tract].B08301.by_population = {};
         data[tract].B08301.by_population.B08301010 = data[tract].B08301.estimate.B08301010 / population;
+        data[tract].B08301.by_population_error = {};
+        data[tract].B08301.by_population_error.B08301010 = data[tract].B08301.error.B08301010 / population;
       });
 
       // Put with geojson data
@@ -97,6 +104,8 @@ function getData(callback) {
         // Get by area.
         f.properties.data.B01003.by_area = {};
         f.properties.data.B01003.by_area.B01003001 = f.properties.data.B01003.estimate.B01003001 / f.properties.area_km;
+        f.properties.data.B01003.by_area_error = {};
+        f.properties.data.B01003.by_area_error.B01003001 = f.properties.data.B01003.error.B01003001 / f.properties.area_km;
 
         return f;
       });
