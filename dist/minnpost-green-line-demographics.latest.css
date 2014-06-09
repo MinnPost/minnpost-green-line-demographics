@@ -47,13 +47,15 @@ body .node-unpublished {
 .mp .minnpost-green-line-demographics-container .demographics-chooser .demographic .legend {
   margin-top: .5em;
 }
-.mp .minnpost-green-line-demographics-container .demographics-chooser .demographic .legend .legend-block {
+.mp .minnpost-green-line-demographics-container .demographics-chooser .demographic .legend .legend-block,
+.mp .minnpost-green-line-demographics-container .demographics-chooser .demographic .legend .legend-block-end {
   display: inline-block;
-  min-width: 10%;
-  margin: 0 3px 3px 0;
-  height: 2.25em;
-  font-size: .75em;
+  min-width: 8%;
+  margin: 0 5px 5px 0;
+  height: 2.1em;
+  font-size: .7em;
   vertical-align: top;
+  border-radius: 2px;
 }
 .mp .minnpost-green-line-demographics-container .map-container {
   position: relative;
@@ -64,13 +66,13 @@ body .node-unpublished {
   right: 0;
 }
 .mp .minnpost-green-line-demographics-container .map-container .tooltip-container .tooltip {
+  text-align: right;
   display: none;
-  min-width: 200px;
+  min-width: 100px;
   margin: .5em .5em 0 0;
   padding: .5em .5em;
-  background-color: rgba(230, 230, 230, 0.85);
-  border: 1px solid #7A7A7A;
-  border-radius: 3px;
+  background-color: #CCCCCC;
+  background-color: rgba(204, 204, 204, 0.9);
 }
 .mp .minnpost-green-line-demographics-container #green-line-map {
   width: 100%;
