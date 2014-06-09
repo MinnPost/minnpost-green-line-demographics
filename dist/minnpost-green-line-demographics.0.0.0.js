@@ -119,7 +119,7 @@ define('helpers', ['jquery', 'underscore'],
 });
 
 
-define('text!templates/application.mustache',[],function () { return '<div class="application-container">\n  <div class="message-container"></div>\n\n  <div class="content-container">\n\n    <div class="loading-container">\n      <i class="loading"></i> Loading...\n    </div>\n\n    <div class="demographics-chooser cf">\n      <div class="demographic pop <%= (currentSet == \'pop\') ? \'active\' : \'\' %>" data-set="pop">\n        <div class="inside">\n          <div class="strong">Population density</div>\n          <div class="caption">Population per square square kilometer.  ~<span class="margin"></span> margin of error.</div>\n          <div class="legend"></div>\n        </div>\n      </div>\n\n      <div class="demographic income <%= (currentSet == \'income\') ? \'active\' : \'\' %>" data-set="income">\n        <div class="inside">\n          <div class="strong">Household income</div>\n          <div class="caption">Median household income for each tract.  ~<span class="margin"></span> margin of error.</div>\n          <div class="legend"></div>\n        </div>\n      </div>\n\n      <div class="demographic white <%= (currentSet == \'white\') ? \'active\' : \'\' %>" data-set="white">\n        <div class="inside">\n          <div class="strong">People of color</div>\n          <div class="caption">Percentage of population that are people of color (not white).  ~<span class="margin"></span> margin of error.</div>\n          <div class="legend"></div>\n        </div>\n      </div>\n\n      <div class="demographic transit <%= (currentSet == \'transit\') ? \'active\' : \'\' %>" data-set="transit">\n        <div class="inside">\n          <div class="strong">Public transit</div>\n          <div class="caption">Percentage of population that uses public transportation for work.  ~<span class="margin"></span> margin of error.</div>\n          <div class="legend"></div>\n        </div>\n      </div>\n    </div>\n\n    <div class="map-container">\n      <div class="tooltip-container">\n        <div class="tooltip">\n          <div class="stop-info"></div>\n          <div class="tract-info"></div>\n        </div>\n      </div>\n\n      <div id="green-line-map"></div>\n    </div>\n\n  </div>\n\n  <div class="footnote-container">\n    <div class="footnote">\n      <p>\n        Line route and stop data provided by MetroTransit via the <a href="http://www.datafinder.org/" target="_blank">MetroGIS DataFinder</a>.\n\n        Demographic data from the Census Bureau\'s 2012 American Community Survey 5 year estimates via <a href="http://censusreporter.org/" target="_blank">Census Reporter</a>.\n\n        Some code, techniques, and data on <a href="https://github.com/minnpost/minnpost-green-line-demographics" target="_blank">Github</a>.</p>\n    </div>\n  </div>\n</div>\n';});
+define('text!templates/application.mustache',[],function () { return '<div class="application-container">\n  <div class="message-container"></div>\n\n  <div class="content-container">\n\n    <div class="loading-container">\n      <i class="loading"></i> Loading...\n    </div>\n\n    <div class="demographics-chooser cf">\n      <div class="demographic pop <%= (currentSet == \'pop\') ? \'active\' : \'\' %>" data-set="pop">\n        <div class="inside">\n          <div class="strong">Population density</div>\n          <div class="caption">Population per square square kilometer.  &#177;<span class="margin"></span> margin of error &#8224;.</div>\n          <div class="legend"></div>\n        </div>\n      </div>\n\n      <div class="demographic income <%= (currentSet == \'income\') ? \'active\' : \'\' %>" data-set="income">\n        <div class="inside">\n          <div class="strong">Household income</div>\n          <div class="caption">Median household income for each tract.  &#177;<span class="margin"></span> margin of error &#8224;.</div>\n          <div class="legend"></div>\n        </div>\n      </div>\n\n      <div class="demographic white <%= (currentSet == \'white\') ? \'active\' : \'\' %>" data-set="white">\n        <div class="inside">\n          <div class="strong">People of color</div>\n          <div class="caption">Percentage of population that are people of color (not white).  &#177;<span class="margin"></span> margin of error &#8224;.</div>\n          <div class="legend"></div>\n        </div>\n      </div>\n\n      <div class="demographic transit <%= (currentSet == \'transit\') ? \'active\' : \'\' %>" data-set="transit">\n        <div class="inside">\n          <div class="strong">Public transit</div>\n          <div class="caption">Percentage of population that uses public transportation for work.  &#177;<span class="margin"></span> margin of error &#8224;.</div>\n          <div class="legend"></div>\n        </div>\n      </div>\n    </div>\n\n    <div class="map-container">\n      <div class="tooltip-container">\n        <div class="tooltip">\n          <div class="stop-info"></div>\n          <div class="tract-info"></div>\n        </div>\n      </div>\n\n      <div id="green-line-map"></div>\n    </div>\n\n  </div>\n\n  <div class="footnote-container">\n    <div class="footnote">\n      <p>&#8224; Margin of error for each demographic is the average margin of error for all census tracts being presented.</p>\n\n      <p>\n        Line route and stop data provided by MetroTransit via the <a href="http://www.datafinder.org/" target="_blank">MetroGIS DataFinder</a>.\n\n        Demographic data from the Census Bureau\'s 2012 American Community Survey 5 year estimates via <a href="http://censusreporter.org/" target="_blank">Census Reporter</a>.\n\n        Some code, techniques, and data on <a href="https://github.com/minnpost/minnpost-green-line-demographics" target="_blank">Github</a>.</p>\n    </div>\n  </div>\n</div>\n';});
 
 /**
  * Main application file for: minnpost-green-line-demographics
@@ -160,6 +160,7 @@ define('minnpost-green-line-demographics', [
           table: 'B01003',
           column: 'B01003001',
           prop: 'by_area',
+          error_prop: 'by_area_error',
           colors: ['#c8e0dc', '#8bc1c7', '#4da0bb', '#087db2', '#0d57a0'],
           format: d3.format(',.0f')
         },
@@ -167,6 +168,7 @@ define('minnpost-green-line-demographics', [
           table: 'B02008',
           column: 'B02008001',
           prop: 'by_population',
+          error_prop: 'by_population_error',
           colors: ['#e6fde6', '#daf8c4', '#dbef9a', '#e7e36f', '#fbd341'],
           format: d3.format('%,.2f')
         },
@@ -174,6 +176,7 @@ define('minnpost-green-line-demographics', [
           table: 'B19013',
           column: 'B19013001',
           prop: 'estimate',
+          error_prop: 'error',
           colors: ['#e5f5ef', '#c7ebe4', '#a6e1dd', '#81d6db', '#55cbdd'],
           format: d3.format('$,.0f')
         },
@@ -181,6 +184,7 @@ define('minnpost-green-line-demographics', [
           table: 'B08301',
           column: 'B08301010',
           prop: 'by_population',
+          error_prop: 'by_population_error',
           colors: ['#dcefd4', '#d2d99c', '#dabe66', '#ec983c', '#ff6633'],
           format: d3.format('%,.2f')
         }
@@ -327,7 +331,7 @@ define('minnpost-green-line-demographics', [
         // Accessorors
         s.access = function(d) { return d.properties.data[s.table][s.prop][s.column]; };
         s.estimate = function(d) { return d.properties.data[s.table].estimate[s.column]; };
-        s.error = function(d) { return d.properties.data[s.table].error[s.column]; };
+        s.error = function(d) { return d.properties.data[s.table][s.error_prop][s.column]; };
 
         // Scale
         var values = this.data.tracts.features.map(s.access).sort();
@@ -361,17 +365,13 @@ define('minnpost-green-line-demographics', [
 
         // While we are here, we should figure out the average
         // margin of error
-        s.avg_error = (this.data.tracts.features.map(function(d, di) {
-          var estimate = s.estimate(d);
-          var error = s.error(d);
-          return error / estimate;
-        }).reduce(function(p, c, i, a) {
+        s.avg_error = (this.data.tracts.features.map(s.error).reduce(function(p, c, i, a) {
           return p + c;
         }, 0)) / this.data.tracts.features.length;
 
         // Show margin of error
         s.legend = d3.select('.demographic.' + si + ' .margin')
-          .text(d3.format('%,.3f')(s.avg_error));
+          .text(s.format(s.avg_error));
 
         // Set new properties
         this.sets[si] = s;
