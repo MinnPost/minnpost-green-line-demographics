@@ -244,7 +244,9 @@ define('minnpost-green-line-demographics', [
         s.error = function(d) { return d.properties.data[s.table][s.error_prop][s.column]; };
 
         // Scale
-        var values = this.data.tracts.features.map(s.access).sort();
+        var values = this.data.tracts.features.map(s.access).sort(function(a, b) {
+          return a - b;
+        });
         s.scale = d3.scale.quantile()
           .domain(values)
           .range(s.colors);
