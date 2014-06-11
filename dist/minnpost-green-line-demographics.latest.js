@@ -119,7 +119,10 @@ define('helpers', ['jquery', 'underscore'],
 });
 
 
-define('text!templates/application.mustache',[],function () { return '<div class="application-container">\n  <div class="message-container"></div>\n\n  <div class="content-container">\n\n    <div class="loading-container">\n      <i class="loading"></i> Loading...\n    </div>\n\n    <div class="demographics-chooser cf">\n      <div class="demographic pop <%= (currentSet == \'pop\') ? \'active\' : \'\' %>" data-set="pop">\n        <div class="inside">\n          <div class="strong">Population density</div>\n          <div class="caption">Population per square square kilometer.  &#177;<span class="margin"></span> margin of error &#8224;.</div>\n          <div class="legend"></div>\n        </div>\n      </div>\n\n      <div class="demographic income <%= (currentSet == \'income\') ? \'active\' : \'\' %>" data-set="income">\n        <div class="inside">\n          <div class="strong">Household income</div>\n          <div class="caption">Median household income for each tract.  &#177;<span class="margin"></span> margin of error &#8224;.</div>\n          <div class="legend"></div>\n        </div>\n      </div>\n\n      <div class="demographic white <%= (currentSet == \'white\') ? \'active\' : \'\' %>" data-set="white">\n        <div class="inside">\n          <div class="strong">People of color</div>\n          <div class="caption">Percentage of population that are people of color (not white).  &#177;<span class="margin"></span> margin of error &#8224;.</div>\n          <div class="legend"></div>\n        </div>\n      </div>\n\n      <div class="demographic transit <%= (currentSet == \'transit\') ? \'active\' : \'\' %>" data-set="transit">\n        <div class="inside">\n          <div class="strong">Public transit</div>\n          <div class="caption">Percentage of population that uses public transportation for work.  &#177;<span class="margin"></span> margin of error &#8224;.</div>\n          <div class="legend"></div>\n        </div>\n      </div>\n    </div>\n\n    <div class="map-container">\n      <div class="tooltip-container">\n        <div class="tooltip">\n          <div class="stop-info"></div>\n          <div class="tract-info"></div>\n        </div>\n      </div>\n\n      <div id="green-line-map"></div>\n    </div>\n\n  </div>\n\n  <div class="footnote-container">\n    <div class="footnote">\n      <p>&#8224; Margin of error for each demographic is the average margin of error for all census tracts being presented.</p>\n\n      <p>\n        Line route and stop data provided by MetroTransit via the <a href="http://www.datafinder.org/" target="_blank">MetroGIS DataFinder</a>.\n\n        Demographic data from the Census Bureau\'s 2012 American Community Survey 5 year estimates via <a href="http://censusreporter.org/" target="_blank">Census Reporter</a>.\n\n        Some code, techniques, and data on <a href="https://github.com/minnpost/minnpost-green-line-demographics" target="_blank">Github</a>.</p>\n    </div>\n  </div>\n</div>\n';});
+define('text!templates/application.underscore',[],function () { return '<div class="application-container">\n  <div class="message-container"></div>\n\n  <div class="content-container">\n\n    <div class="loading-container">\n      <i class="loading"></i> Loading...\n    </div>\n\n    <div class="demographics-chooser cf">\n      <div class="demographic pop <%= (currentSet == \'pop\') ? \'active\' : \'\' %>" data-set="pop">\n        <div class="inside">\n          <div class="strong">Population density</div>\n          <div class="caption">Population per square square kilometer.  &#177;<span class="margin"></span> margin of error &#8224;.</div>\n          <div class="legend"></div>\n        </div>\n      </div>\n\n      <div class="demographic income <%= (currentSet == \'income\') ? \'active\' : \'\' %>" data-set="income">\n        <div class="inside">\n          <div class="strong">Household income</div>\n          <div class="caption">Median household income for each tract.  &#177;<span class="margin"></span> margin of error &#8224;.</div>\n          <div class="legend"></div>\n        </div>\n      </div>\n\n      <div class="demographic white <%= (currentSet == \'white\') ? \'active\' : \'\' %>" data-set="white">\n        <div class="inside">\n          <div class="strong">People of color</div>\n          <div class="caption">Percentage of population that are people of color (not white).  &#177;<span class="margin"></span> margin of error &#8224;.</div>\n          <div class="legend"></div>\n        </div>\n      </div>\n\n      <div class="demographic transit <%= (currentSet == \'transit\') ? \'active\' : \'\' %>" data-set="transit">\n        <div class="inside">\n          <div class="strong">Public transit</div>\n          <div class="caption">Percentage of population that uses public transportation for work.  &#177;<span class="margin"></span> margin of error &#8224;.</div>\n          <div class="legend"></div>\n        </div>\n      </div>\n    </div>\n\n    <div class="map-container">\n      <div class="tooltip-container">\n        <div class="tooltip">\n          <div class="stop-info"></div>\n          <div class="tract-info"></div>\n        </div>\n      </div>\n\n      <div id="green-line-map"></div>\n    </div>\n\n  </div>\n\n  <div class="footnote-container">\n    <div class="footnote">\n      <p>&#8224; Margin of error for each demographic is the average margin of error for all census tracts being presented.</p>\n\n      <p>\n        Line route and stop data provided by MetroTransit via the <a href="http://www.datafinder.org/" target="_blank">MetroGIS DataFinder</a>.\n\n        Demographic data from the Census Bureau\'s 2012 American Community Survey 5 year estimates via <a href="http://censusreporter.org/" target="_blank">Census Reporter</a>.\n\n        Some code, techniques, and data on <a href="https://github.com/minnpost/minnpost-green-line-demographics" target="_blank">Github</a>.</p>\n    </div>\n  </div>\n</div>\n';});
+
+
+define('text!templates/fallback.underscore',[],function () { return '<div class="application-container">\n  <div class="message-container"></div>\n\n  <div class="content-container fallback">\n\n    <img src="<%= paths.images %>fallback-pop-density.png" />\n    <div class="separator"></div>\n    <img src="<%= paths.images %>fallback-income.png" />\n    <div class="separator"></div>\n    <img src="<%= paths.images %>fallback-color.png" />\n    <div class="separator"></div>\n    <img src="<%= paths.images %>fallback-transit.png" />\n\n  </div>\n\n  <div class="footnote-container">\n    <div class="footnote">\n      <p>&#8224; Margin of error for each demographic is the average margin of error for all census tracts being presented.</p>\n\n      <p>\n        Line route and stop data provided by MetroTransit via the <a href="http://www.datafinder.org/" target="_blank">MetroGIS DataFinder</a>.\n\n        Demographic data from the Census Bureau\'s 2012 American Community Survey 5 year estimates via <a href="http://censusreporter.org/" target="_blank">Census Reporter</a>.\n\n        Some code, techniques, and data on <a href="https://github.com/minnpost/minnpost-green-line-demographics" target="_blank">Github</a>.</p>\n    </div>\n  </div>\n</div>\n';});
 
 /**
  * Main application file for: minnpost-green-line-demographics
@@ -130,14 +133,22 @@ define('text!templates/application.mustache',[],function () { return '<div class
 
 // Create main application
 define('minnpost-green-line-demographics', [
-  'jquery', 'underscore', 'd3', 'topojson', 'mpConfig', 'mpFormatters',
+  'jquery', 'underscore', 'mpConfig', 'mpFormatters',
   'helpers',
-  'text!templates/application.mustache'
+  'text!templates/application.underscore',
+  'text!templates/fallback.underscore'
 ], function(
-  $, _, d3, topojson, mpConfig, mpFormatters,
-  helpers,
-  tApplication
+  $, _, mpConfig, mpFormatters,
+  helpers, tApplication, tFallback
   ) {
+
+  // Test for SVG
+  function hasSVG() {
+    return !!('createElementNS' in document && document.createElementNS('http://www.w3.org/2000/svg','svg').createSVGRect);
+  }
+
+  // To use later
+  var d3, topojson;
 
   // Constructor for app
   var App = function(options) {
@@ -150,8 +161,33 @@ define('minnpost-green-line-demographics', [
 
   // Extend with custom methods
   _.extend(App.prototype, {
-    // Start function
+    // Start
     start: function() {
+      var thisApp = this;
+
+      // If SVG is available, load some other things
+      if (hasSVG()) {
+        require(['d3', 'topojson'], function(d3proxy, topojsonproxy) {
+          d3 = d3proxy;
+          topojson = topojsonproxy;
+          thisApp.full();
+        });
+      }
+      else {
+        this.fallback();
+      }
+    },
+
+    // Fallback
+    fallback: function() {
+      this.templateFallback = _.template(tFallback);
+      this.$el.html(this.templateFallback({
+        paths: this.options.paths
+      }));
+    },
+
+    // Full app
+    full: function() {
       var thisApp = this;
 
       // Tract data options
@@ -568,7 +604,7 @@ define('minnpost-green-line-demographics', [
 
 
 /**
- * Run application
+ * Run application.
  */
 require(['jquery', 'minnpost-green-line-demographics'], function($, App) {
   $(document).ready(function() {

@@ -17,6 +17,12 @@ body .node-unpublished {
   background-repeat: no-repeat;
 }
 
+.mp .browser-upgrade-note {
+  margin: 1em;
+  border: 1px solid #DEDEDE;
+  padding: 1em;
+}
+
 .mp .minnpost-green-line-demographics-container .application-container {
   padding-top: 2em;
 }
@@ -141,6 +147,15 @@ body .node-unpublished {
   stroke-width: 0;
   stroke: none;
   pointer-events: all;
+}
+.mp .minnpost-green-line-demographics-container .fallback img {
+  max-width: 100%;
+  margin-bottom: 2em;
+}
+.mp .minnpost-green-line-demographics-container .fallback .separator {
+  width: 50%;
+  margin: 0 auto 4em auto;
+  border-bottom: 1px solid #DEDEDE;
 }
 @media screen and (max-width: 875px) {
   .mp .minnpost-green-line-demographics-container .demographics-chooser .demographic {
