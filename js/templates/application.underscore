@@ -35,7 +35,7 @@
       <div class="demographic transit <%= (currentSet == 'transit') ? 'active' : '' %>" data-set="transit">
         <div class="inside">
           <div class="strong">Public transit</div>
-          <div class="caption">Percentage of population that uses public transportation for work.  &#177;<span class="margin"></span> margin of error &#8224;.</div>
+          <div class="caption">Percentage of worker population that uses public transportation for work.  &#177;<span class="margin"></span> margin of error &#8224;.</div>
           <div class="legend"></div>
         </div>
       </div>

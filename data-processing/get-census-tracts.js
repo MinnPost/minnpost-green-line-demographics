@@ -71,9 +71,13 @@ function getData(callback) {
     if (!error && response.statusCode == 200) {
       var data = JSON.parse(body).data;
 
-      // Filter out only the parts we really need.
+      // Convert and filter
       // B08301010 is public transporation column
       Object.keys(data).forEach(function(tract, i) {
+        // Get total amount of workes
+        var workers = data[tract].B08301.estimate.B08301001;
+
+        // We only want to keep the public transport data.
         data[tract].B08301.estimate = {
           'B08301010': data[tract].B08301.estimate.B08301010
         };
@@ -89,11 +93,11 @@ function getData(callback) {
         data[tract].B02008.by_population_error = {};
         data[tract].B02008.by_population_error.B02008001 = data[tract].B02008.error.B02008001 / population;
 
-        // Normalize means of transportation by population
+        // Normalize means of transportation by number of workers
         data[tract].B08301.by_population = {};
-        data[tract].B08301.by_population.B08301010 = data[tract].B08301.estimate.B08301010 / population;
+        data[tract].B08301.by_population.B08301010 = data[tract].B08301.estimate.B08301010 / workers;
         data[tract].B08301.by_population_error = {};
-        data[tract].B08301.by_population_error.B08301010 = data[tract].B08301.error.B08301010 / population;
+        data[tract].B08301.by_population_error.B08301010 = data[tract].B08301.error.B08301010 / workers;
       });
 
       // Put with geojson data
