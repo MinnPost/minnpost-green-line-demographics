@@ -110,7 +110,6 @@ function getData(callback) {
         f.properties.data.B01003.by_area.B01003001 = f.properties.data.B01003.estimate.B01003001 / f.properties.area_km;
         f.properties.data.B01003.by_area_error = {};
         f.properties.data.B01003.by_area_error.B01003001 = f.properties.data.B01003.error.B01003001 / f.properties.area_km;
-
         return f;
       });
 
