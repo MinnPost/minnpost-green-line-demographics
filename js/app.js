@@ -7,14 +7,22 @@
 
 // Create main application
 define('minnpost-green-line-demographics', [
-  'jquery', 'underscore', 'd3', 'topojson', 'mpConfig', 'mpFormatters',
+  'jquery', 'underscore', 'mpConfig', 'mpFormatters',
   'helpers',
-  'text!templates/application.mustache'
+  'text!templates/application.underscore',
+  'text!templates/fallback.underscore'
 ], function(
-  $, _, d3, topojson, mpConfig, mpFormatters,
-  helpers,
-  tApplication
+  $, _, mpConfig, mpFormatters,
+  helpers, tApplication, tFallback
   ) {
+
+  // Test for SVG
+  function hasSVG() {
+    return !!('createElementNS' in document && document.createElementNS('http://www.w3.org/2000/svg','svg').createSVGRect);
+  }
+
+  // To use later
+  var d3, topojson;
 
   // Constructor for app
   var App = function(options) {
@@ -27,8 +35,33 @@ define('minnpost-green-line-demographics', [
 
   // Extend with custom methods
   _.extend(App.prototype, {
-    // Start function
+    // Start
     start: function() {
+      var thisApp = this;
+
+      // If SVG is available, load some other things
+      if (hasSVG()) {
+        require(['d3', 'topojson'], function(d3proxy, topojsonproxy) {
+          d3 = d3proxy;
+          topojson = topojsonproxy;
+          thisApp.full();
+        });
+      }
+      else {
+        this.fallback();
+      }
+    },
+
+    // Fallback
+    fallback: function() {
+      this.templateFallback = _.template(tFallback);
+      this.$el.html(this.templateFallback({
+        paths: this.options.paths
+      }));
+    },
+
+    // Full app
+    full: function() {
       var thisApp = this;
 
       // Tract data options
@@ -445,7 +478,7 @@ define('minnpost-green-line-demographics', [
 
 
 /**
- * Run application
+ * Run application.
  */
 require(['jquery', 'minnpost-green-line-demographics'], function($, App) {
   $(document).ready(function() {

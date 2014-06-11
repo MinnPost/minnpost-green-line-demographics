@@ -13,6 +13,13 @@ body .node-unpublished {
   background-repeat: no-repeat;
 }
 
+// Browser note needs help
+.mp .browser-upgrade-note {
+  margin: 1em;
+  border: 1px solid #DEDEDE;
+  padding: 1em;
+}
+
 // Wrap everything for specificity
 .mp .minnpost-green-line-demographics-container {
 
@@ -165,6 +172,19 @@ body .node-unpublished {
       stroke-width: 0;
       stroke: none;
       pointer-events: all;
+    }
+  }
+
+  .fallback {
+    img {
+      max-width: 100%;
+      margin-bottom: 2em;
+    }
+
+    .separator {
+      width: 50%;
+      margin: 0 auto 4em auto;
+      border-bottom: 1px solid #DEDEDE;
     }
   }
 
