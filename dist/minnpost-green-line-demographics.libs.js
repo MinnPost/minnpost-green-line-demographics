@@ -11127,6 +11127,8 @@ return jQuery;
 
 }));
 
+define("jquery", function(){});
+
 //     Underscore.js 1.6.0
 //     http://underscorejs.org
 //     (c) 2009-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -22040,7 +22042,7 @@ return jQuery;
 }();
 !function() {
   var topojson = {
-    version: "1.6.13",
+    version: "1.6.14",
     mesh: function(topology) { return object(topology, meshArcs.apply(this, arguments)); },
     meshArcs: meshArcs,
     merge: function(topology) { return object(topology, mergeArcs.apply(this, arguments)); },

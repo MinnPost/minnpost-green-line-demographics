@@ -11,7 +11,7 @@
       <div class="demographic pop <%= (currentSet == 'pop') ? 'active' : '' %>" data-set="pop">
         <div class="inside">
           <div class="strong">Population density</div>
-          <div class="caption">Population per square square kilometer.  &#177;<span class="margin"></span> margin of error &#8224;.</div>
+          <div class="caption">Population per square kilometer.  &#177;<span class="margin"></span> margin of error &#8224;.</div>
           <div class="legend"></div>
         </div>
       </div>
