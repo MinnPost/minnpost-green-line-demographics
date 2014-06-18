@@ -2,7 +2,7 @@
 
 Exploration of the new Green Line
 
-You can see this project in action at *published story link goes here*.
+You can see this project in action at [Who lives on the Green Line](http://www.minnpost.com/data/2014/06/who-lives-green-line).
 
 *Unless otherwise noted, MinnPost projects on [Github](https://github.com/minnpost) are story-driven and meant for transparency sake and not focused on re-use.  For a list of our more reusable projects, go to [code.minnpost.com](http://code.minnpost.com).*
 
